@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/navigation_content_main">
+    <fragment
+        android:id="@+id/navigation_content_main"
+        android:name="com.example.pogodynka.contentMain"
+        android:label="content_main_fragment"
+        tools:layout="@layout/content_main">
+        <action
+            android:id="@+id/action_navigation_content_main_to_weatherInoFragment"
+            app:destination="@id/weatherInfoFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/weatherInfoFragment"
+        android:name="com.example.pogodynka.weatherInoFragment"
+        android:label="weatherInoFragment"
+        tools:layout="@layout/city_weather_info"
+        >
+
+        <argument
+            android:name="City"
+            app:argType="string" />
+    </fragment>
+
+</navigation>
