@@ -67,8 +67,12 @@ class weatherInoFragment: Fragment() {
             }else {
                 root.wi_timezone.text =(weatherResponse.timezone / 3600).toString() + " UTC"
             }
-            root.wi_sunrise.text = dateFormatter(weatherResponse.sys.sunrise.toLong())
-            root.wi_sunset.text = dateFormatter(weatherResponse.sys.sunset.toLong())
+            var sunrise  = dateFormatter(weatherResponse.sys.sunrise.toLong())
+            sunrise = sunrise.replace(sunrise[2].toString(),(sunrise[2].toString().toInt() + (weatherResponse.timezone/3600)).toString())
+            root.wi_sunrise.text =sunrise
+            var sunset = dateFormatter(weatherResponse.sys.sunset.toLong())
+            sunset = sunset.replace(sunset[2].toString(),(sunset[2].toString().toInt() + (weatherResponse.timezone/3600)).toString())
+            root.wi_sunset.text = sunset
             root.wi_pressure.text = weatherResponse.main.pressure.toString() + " hPa"
 
         }
@@ -79,7 +83,7 @@ class weatherInoFragment: Fragment() {
     fun dateFormatter(epoch: Long): String {
         // epoch = 1557954848
         val date = Date(epoch * 1000L)
-        val sdf = SimpleDateFormat("dd-MM-yyyy HH:mm")
+        val sdf = SimpleDateFormat(" HH:mm")
         return sdf.format(date)
         // returned value = "2019-05-15 14:14:08.000000"
     }
