@@ -12,13 +12,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.room.Room
+import com.example.iceandfireapi.data.network.WeatherApiService
 import com.example.pogodynka.database.City
 import com.example.pogodynka.database.CityDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_layout.view.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
@@ -51,9 +54,21 @@ class MainActivity : AppCompatActivity() {
                 }
                 if(noErrors)
                 {
+                    val apiService = WeatherApiService()
                     val cityInsert = City(dialogView.add_city_text.text.toString())
-                        activityViewModel.insert(cityInsert)
-                        mAlertDialog.dismiss()
+                    GlobalScope.launch(Dispatchers.Main) {
+                        try {
+                            val weatherResponse = apiService.getWeather(cityInsert.cityName).await()
+
+                            val cityInsertNew = City(weatherResponse.name)
+                            activityViewModel.insert(cityInsertNew)
+                            mAlertDialog.dismiss()
+                        }catch (e: IOException){
+                            //activityViewModel.delete(cityInsert)
+                            dialogView.add_city_layout.error="Wrong city name"
+                        }
+                    }
+
 
                 }
             }

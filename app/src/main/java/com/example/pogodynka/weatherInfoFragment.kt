@@ -32,8 +32,6 @@ class weatherInoFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         val root = inflater.inflate(R.layout.city_weather_info, container, false)
         val cityArg = weatherInoFragmentArgs.fromBundle(arguments!!)
         val city = cityArg.City
@@ -41,15 +39,13 @@ class weatherInoFragment: Fragment() {
         var day = LocalDate.now().dayOfWeek.name
        day = day.toLowerCase()
         day = day.capitalize()
-
         root.wi_day.text = day
         root.wi_city.text = city
 
         GlobalScope.launch(Dispatchers.Main) {
             val weatherResponse = apiService.getWeather(city).await()
 
-            val url: String =
-                "https://openweathermap.org/img/w/" + weatherResponse.weather[0].icon + ".png"
+            val url: String = "https://openweathermap.org/img/w/" + weatherResponse.weather[0].icon + ".png"
             Picasso.get()
                 .load(url)
                .resize(200,200)
@@ -74,18 +70,14 @@ class weatherInoFragment: Fragment() {
             sunset = sunset.replace(sunset[2].toString(),(sunset[2].toString().toInt() + (weatherResponse.timezone/3600)).toString())
             root.wi_sunset.text = sunset
             root.wi_pressure.text = weatherResponse.main.pressure.toString() + " hPa"
-
         }
-//      val  btn = root.findViewById<FloatingActionButton>(R.id.floating_btn_add)
-//        btn.hide()
         return root
     }
     fun dateFormatter(epoch: Long): String {
-        // epoch = 1557954848
+
         val date = Date(epoch * 1000L)
         val sdf = SimpleDateFormat(" HH:mm")
         return sdf.format(date)
-        // returned value = "2019-05-15 14:14:08.000000"
     }
 
     override fun onResume() {

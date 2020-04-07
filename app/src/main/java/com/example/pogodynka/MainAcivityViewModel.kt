@@ -23,4 +23,9 @@ class MainAcivityViewModel (application: Application): AndroidViewModel(applicat
             repository.insert(city)
         }
     }
+    fun delete (city: City){
+        viewModelScope.launch{
+            repository.delete(city)
+        }
+    }
 }
